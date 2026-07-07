@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDEA LAB — by PTR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink:#0a0a0a;
+    --accent:#006cf0;
+    --paper:#fafaf9;
+    --line:#dcdcda;
+    --line-soft:#eaeae8;
+    --muted:#9a9a97;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ---------- HEADER ---------- */
+  .title-row{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  h1{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-weight:800;
+    font-size: clamp(46px, 11vw, 68px);
+    letter-spacing: 0.01em;
+    text-transform:uppercase;
+    margin:0;
+    line-height:0.85;
+  }
+  .byline{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    font-weight:500;
+    color:var(--muted);
+    letter-spacing:0.02em;
+    white-space:nowrap;
+  }
+  .subtitle{
+    font-size:14.5px;
+    color:#5a5a57;
+    margin:6px 0 0;
+    font-weight:400;
+  }
+
+  /* ---------- TICKET ---------- */
+  .ticket{
+    position:relative;
+    margin-top:34px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:2px;
+  }
+
+  .ticket-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 20px;
+    border-bottom:1px dashed var(--line);
+  }
+  .ticket-no{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:var(--muted);
+  }
+  .barcode{
+    height:18px;
+    width:70px;
+    opacity:0.6;
+  }
+  .barcode rect{ fill: var(--ink); }
+
+  .row{
+    position:relative;
+    padding:16px 20px;
+    border-bottom:1px dashed var(--line-soft);
+    transition: background 0.15s ease;
+  }
+  .row:last-of-type{
+    border-bottom:none;
+  }
+  .row.locked{
+    background: rgba(0,108,240,0.045);
+  }
+  .row.locked::before{
+    content:"";
+    position:absolute;
+    left:0; top:0; bottom:0;
+    width:3px;
+    background:var(--accent);
+  }
+
+  .row-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .row-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .row.locked .row-label{ color:var(--accent); }
+
+  .row-actions{
+    display:flex;
+    gap:2px;
+    align-items:center;
+  }
+  .icon-btn{
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--muted);
+    border-radius:4px;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+  .icon-btn:hover{ background:var(--line-soft); }
+  .row.locked .lock-btn{ color:var(--accent); }
+  .icon-btn svg{ width:15px; height:15px; display:block; }
+
+  .row-value{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-weight:700;
+    font-size:32px;
+    line-height:1.05;
+    letter-spacing:0.005em;
+    margin-top:6px;
+    min-height:1.1em;
+  }
+
+  .row-value.fade{
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn{
+    from{ opacity:0; transform: translateY(3px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  /* palette swatches */
+  .swatches{
+    display:flex;
+    gap:6px;
+    margin-top:8px;
+  }
+  .swatch{
+    width:26px; height:26px;
+    border-radius:3px;
+    border:1px solid rgba(0,0,0,0.08);
+  }
+  .palette-name{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-weight:700;
+    font-size:22px;
+    margin-top:6px;
+  }
+
+  /* perforated tear-off edge */
+  .perforation{
+    position:relative;
+    height:14px;
+    background:
+      radial-gradient(circle 7px at 7px 0, transparent 7px, var(--bg) 7.5px) top left,
+      var(--paper);
+    background-repeat: repeat-x;
+    background-size: 18px 14px;
+    border-bottom:1px solid var(--line);
+  }
+
+  /* ---------- CHIPS ---------- */
+  .chips{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-top:18px;
+    padding:0 20px;
+  }
+  .chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    font-weight:500;
+    letter-spacing:0.02em;
+    background:none;
+    border:1px dashed var(--muted);
+    color:#5a5a57;
+    border-radius:20px;
+    padding:6px 13px;
+    cursor:pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .chip:hover{
+    border-color:var(--accent);
+    color:var(--accent);
+  }
+
+  /* ---------- GENERATE BUTTON ---------- */
+  .generate-row{
+    margin-top:28px;
+    display:flex;
+    justify-content:center;
+  }
+  .generate-btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    border-radius:3px;
+    padding:15px 44px;
+    cursor:pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .generate-btn:hover{ background:var(--accent); }
+  .generate-btn:active{ transform: scale(0.98); }
+
+  :focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="title-row">
+      <h1>IDEA LAB</h1>
+      <span class="byline">[by PTR]</span>
+    </div>
+    <p class="subtitle">Never run out of creative ideas again.</p>
+  </header>
+
+  <div class="ticket">
+    <div class="ticket-head">
+      <span class="ticket-no" id="ticket-no">IDEA NO. 000001</span>
+      <svg class="barcode" viewBox="0 0 70 18" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="2" height="18"/>
+        <rect x="4" y="0" width="1" height="18"/>
+        <rect x="7" y="0" width="3" height="18"/>
+        <rect x="12" y="0" width="1" height="18"/>
+        <rect x="15" y="0" width="2" height="18"/>
+        <rect x="19" y="0" width="1" height="18"/>
+        <rect x="22" y="0" width="4" height="18"/>
+        <rect x="28" y="0" width="1" height="18"/>
+        <rect x="31" y="0" width="2" height="18"/>
+        <rect x="35" y="0" width="1" height="18"/>
+        <rect x="38" y="0" width="3" height="18"/>
+        <rect x="43" y="0" width="1" height="18"/>
+        <rect x="46" y="0" width="2" height="18"/>
+        <rect x="50" y="0" width="1" height="18"/>
+        <rect x="53" y="0" width="4" height="18"/>
+        <rect x="59" y="0" width="1" height="18"/>
+        <rect x="62" y="0" width="2" height="18"/>
+        <rect x="66" y="0" width="1" height="18"/>
+      </svg>
+    </div>
+    <div id="ticket-rows"></div>
+    <div class="perforation"></div>
+  </div>
+
+  <div class="chips" id="chips"></div>
+
+  <div class="generate-row">
+    <button class="generate-btn" id="generate-btn">Generate</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DATA — swap / extend these lists with your own categories.
+   ============================================================ */
+const DATA = {
+  theme: ["Galaxy", "Nebula", "Black Hole", "Planet", "Moon", "Mars", "Saturn Rings", "Asteroid Field", "Comet", "Meteor Shower", "Supernova", "Wormhole", "Space Station", "Spaceship", "Alien Planet", "Moon Colony", "Space Colony", "Deep Space", "Cosmic Storm", "Dyson Sphere", "Quantum Realm", "Parallel Universe", "Time Travel", "Orbital City", "Interstellar Highway", "Space Observatory", "Alien Civilization", "Space Elevator", "Terraforming Colony", "Cosmic Gateway", "Skyscraper", "Cathedral", "Castle", "Palace", "Temple", "Library", "Museum", "Opera House", "Theater", "Bridge", "Lighthouse", "Train Station", "Airport Terminal", "Stadium", "Arena", "Fortress", "Bunker", "Prison", "Factory", "Warehouse", "Shopping Mall", "Hotel", "Luxury Villa", "Apartment Complex", "Office Tower", "Observatory", "Aquarium", "Greenhouse", "Monastery", "Ancient Ruins", "Forest", "Jungle", "Rainforest", "Desert", "Mountains", "Volcano", "Cave", "Waterfall", "River", "Lake", "Ocean", "Coral Reef", "Beach", "Island", "Glacier", "Arctic", "Tundra", "Swamp", "Canyon", "Valley", "Savannah", "Bamboo Forest", "Cherry Blossom Forest", "Redwood Forest", "Mangrove", "Meadow", "Flower Field", "Mushroom Forest", "Northern Lights", "Storm", "Ancient Egypt", "Ancient Rome", "Ancient Greece", "Viking Age", "Samurai Era", "Feudal Japan", "Medieval Europe", "Renaissance", "Wild West", "Pirate Age", "Aztec Empire", "Mayan Civilization", "Inca Empire", "Ancient China", "Ancient Persia", "Ottoman Empire", "Byzantine Empire", "Celtic Culture", "Roman Empire", "Spartan Warriors", "Knights Templar", "Mongol Empire", "French Revolution", "Industrial Revolution", "Victorian Era", "World War I", "World War II", "Ancient Babylon", "Ancient India", "Colonial Era", "Dragon", "Wizard", "Witch", "Elf Kingdom", "Dwarf Kingdom", "Fairy Forest", "Enchanted Castle", "Floating Islands", "Magic Academy", "Ancient Temple", "Crystal Cave", "Phoenix", "Griffin", "Unicorn", "Mermaid", "Giant", "Goblin Camp", "Orc Fortress", "Demon Realm", "Angelic Kingdom", "Dark Lord", "Magic Portal", "Spellbook", "Cursed Forest", "Mystic Village", "Sacred Tree", "Forgotten Kingdom", "Elemental Spirits", "Ice Kingdom", "Fire Kingdom", "Cyberpunk City", "Futuristic City", "AI Civilization", "Android", "Humanoid Robot", "Robot Factory", "Space Station", "Spaceship", "Alien Invasion", "Alien Civilization", "Time Machine", "Time Travel", "Quantum Computer", "Virtual Reality", "Augmented Reality", "Holographic City", "Drone Swarm", "Megacity", "Underwater City", "Floating Megacity", "Terraforming", "Mars Colony", "Lunar Base", "Genetic Engineering", "Nanotechnology", "Neural Network", "Digital World", "Smart City", "Hyperloop", "Synthetic Humanity", "Haunted House", "Haunted Hospital", "Haunted Hotel", "Cemetery", "Graveyard", "Ghost", "Vampire", "Werewolf", "Zombie Apocalypse", "Demon", "Possession", "Exorcism", "Cursed Forest", "Cursed Doll", "Abandoned School", "Abandoned Asylum", "Abandoned Church", "Abandoned Village", "Ritual Site", "Cult", "Blood Moon", "Dark Woods", "Monster Lair", "Silent Town", "Foggy Forest", "Nightmare", "Analog Horror", "Liminal Space", "Backrooms", "Haunted Carnival", "Urban Lifestyle", "City Life", "Night City", "Neon Streets", "Rainy City", "Underground Culture", "Subculture Scene", "Streetwear Fashion", "Skate Culture", "BMX Culture", "Graffiti Walls", "Subway Station Life", "Rooftop Hangouts", "Alleyways", "Downtown District", "Night Market", "Coffee Shop Culture", "Fast Food Culture", "Luxury Lifestyle", "Club Night", "Festival Crowd", "Concert Energy", "Sneaker Culture", "Bar Scene", "Console", "Level", "Boss", "Map", "Arena", "Dream", "Memory", "Time", "Chaos", "Order", "Void", "Reality", "Illusion", "Light", "Shadow", "Emotion", "Identity", "Signal", "Glitch", "Fragment", "Life", "Death", "Birth", "Evolution", "Future", "Past", "Present", "Truth", "Lie", "Freedom", "Control", "Humanity", "Machine", "Nature", "Civilization", "Society", "Culture", "System", "World", "Universe", "Consciousness", "Technology", "Creation", "Destruction", "Transformation", "Survival", "Isolation", "Connection", "Communication", "Progress"],
+  style: ["Minimalism", "Ultra Minimal", "Swiss Design", "Flat Design", "Semi-flat Design", "Clean Corporate", "Grid-based Design", "Editorial Minimalism", "Modern UI Style", "Scandinavian Design", "White Space Heavy", "Typographic Focus", "Monochrome Minimal", "Functional Design", "Bauhaus Inspired", "Brutalism", "Neo-Brutalism", "Raw Design", "Grunge Digital", "Experimental Layout", "Anti-design", "Broken Grid", "Collage Chaos", "Cut & Paste Style", "Deconstructed Design", "Post-Internet Art", "Maximal Chaos", "DIY Aesthetic", "Xerox Style", "Analog Collage", "Cyberpunk", "Futuristic UI", "Sci-Fi Interface Design", "HUD Design", "Data Visualization Style", "Neural AI Inspired", "Glitch Art", "Digital Distortion", "Tech Interface Design", "Holographic Style", "AR/VR Interface", "Terminal Hacker Style", "Code Aesthetic", "3D UI Design", "Glassmorphism", "Neumorphism", "Y2K Aesthetic", "Vaporwave", "Synthwave", "Frutiger Aero", "Frutiger Metro", "80s Neon Style", "90s Web Design", "Old Internet Aesthetic", "Windows XP Style", "CRT Monitor Look", "VHS Aesthetic", "Pixel Art Style", "Arcade Retro", "Polaroid Style", "Cassette Aesthetic", "Magazine Editorial", "Newspaper Layout", "Poster Design Style", "Book Cover Design", "Album Cover Art Style", "Typography Driven Design", "Swiss Editorial Grid", "Collage Editorial", "Fashion Editorial", "High-end Print Design", "Billboard Design Style", "Brochure Layout Style", "Zine Aesthetic", "Art Book Style", "Poster Art Direction", "Surrealism", "Abstract Art", "Concept Art Style", "Dreamcore", "Weirdcore", "Liminal Spaces", "Analog Horror Style", "Symbolic Design", "Narrative Design", "Conceptual Art", "Expressionism", "Hyperrealism", "Low Poly Concept Art", "Stylized Illustration", "Digital Painting Style", "Brutalist Architecture Style", "Futuristic Architecture", "Industrial Design Aesthetic", "Concrete Aesthetic", "Monolithic Style", "Organic Architecture", "High-rise Urban Style", "Underground Design", "Megastructure Aesthetic", "Minimal Architecture Render Style", "Streetwear Design Style", "Luxury Branding Style", "Sports Branding Style", "High Fashion Editorial", "Sneaker Design Style", "Music Industry Visual Style", "Festival Poster Style", "Gaming Key Art Style", "Esports Branding Style", "Social Media Design Style", "Influencer Aesthetic", "Advertising Campaign Style", "Billboard Commercial Style", "Mixed Media Collage", "Paper Cut Collage", "Digital Collage Art", "Photomontage Style", "Scrapbook Aesthetic", "Texture Heavy Design", "Layered Composition Style", "Torn Paper Style", "Magazine Cutout Style", "Experimental Texture Blend", "Vector Illustration", "3D Render Style", "Isometric Design", "Flat Illustration", "Line Art Style", "Sketch Style", "Ink Illustration", "Watercolor Style", "Oil Painting Style", "Airbrush Style", "Anime Inspired", "Cartoon Style", "Semi-realistic Illustration", "Pixel Illustration", "Stylized 3D Art", "Dark Atmospheric Style", "Cinematic Style", "Moody Lighting Style", "Neon Atmosphere", "Foggy Misty Style", "High Contrast Style", "Soft Light Aesthetic", "Dramatic Lighting Style", "Low Light Noir Style", "Golden Hour Style", "Blue Hour Aesthetic", "AI Generated Aesthetic", "Neural Render Style", "Prompt Art Style", "Data Glitch Style", "Synthetic Reality", "Post-Algorithm Art", "Infinite Loop Design", "Digital Dream Style", "Hyper-Experimental Design", "Algorithmic Composition"],
+  mood: ["Melancholic", "Euphoric", "Tense", "Serene", "Chaotic", "Nostalgic", "Ominous", "Playful", "Sterile", "Intimate", "Dreamy", "Aggressive", "Whimsical", "Somber", "Triumphant", "Eerie", "Cozy", "Restless", "Hypnotic", "Rebellious", "Tranquil", "Anxious", "Romantic", "Mysterious", "Joyful", "Desolate", "Energetic", "Contemplative", "Menacing", "Hopeful", "Bittersweet", "Surreal", "Claustrophobic", "Ethereal", "Defiant", "Wistful", "Frantic", "Peaceful", "Sinister", "Vibrant", "Lonely", "Nostalgic Warmth", "Foreboding", "Elated", "Gritty", "Delicate", "Unsettling", "Grand", "Introspective", "Feverish"],
+  colorPalette: [
+    { name: "Ember", colors: ["#1a1a1a", "#d94f2b", "#f2a65a", "#f4e9dc"] },
+    { name: "Deep Sea", colors: ["#0b1d2a", "#134e6f", "#1f9099", "#c7f0db"] },
+    { name: "Acid", colors: ["#0a0a0a", "#c6ff3c", "#ff3ca6", "#ffffff"] },
+    { name: "Clay", colors: ["#3d2b1f", "#a9744f", "#d9b48f", "#f2e6d8"] },
+    { name: "Nordic", colors: ["#2e3440", "#5e81ac", "#a3be8c", "#eceff4"] },
+    { name: "Signal", colors: ["#0a0a0a", "#006cf0", "#e4e4e4", "#ffffff"] },
+    { name: "Rust & Bone", colors: ["#1c1c1c", "#7a3b2e", "#c9a66b", "#e8e2d4"] },
+    { name: "Neon Noir", colors: ["#08080c", "#ff2e88", "#00f5d4", "#f5f5f5"] },
+    { name: "Desert Bloom", colors: ["#e8c39e", "#d17a4a", "#8c4843", "#3b2528"] },
+    { name: "Glacier", colors: ["#eaf4fb", "#a9d6e5", "#468faf", "#013a63"] },
+    { name: "Forest Floor", colors: ["#1b2a1e", "#3f6b3a", "#8aa876", "#e0e6c8"] },
+    { name: "Sunfade", colors: ["#fff3b0", "#ffb703", "#fb8500", "#8e3b00"] },
+    { name: "Lavender Static", colors: ["#f3e8ff", "#c9a0ff", "#7b4fd1", "#241a3a"] },
+    { name: "Concrete", colors: ["#f2f2f0", "#c9c9c4", "#8a8a85", "#2b2b28"] },
+    { name: "Blood Orange", colors: ["#1a0d0a", "#c1440e", "#f2811d", "#f7e3c4"] },
+    { name: "Mint Chrome", colors: ["#0d1a17", "#1fd6a7", "#8fffe0", "#f0fff9"] },
+    { name: "Royal Ink", colors: ["#050510", "#2b1f6b", "#5c46e0", "#d8d0ff"] },
+    { name: "Terracotta Sun", colors: ["#fff7ec", "#e8a24b", "#c1502e", "#4a2418"] },
+    { name: "Cyber Grape", colors: ["#120021", "#5b2a86", "#b14aed", "#f4c2ff"] },
+    { name: "Bone & Ash", colors: ["#f6f2ec", "#d8d0c4", "#8f867a", "#1c1a17"] },
+    { name: "Aurora", colors: ["#04222f", "#0b6e4f", "#08a184", "#7cf5c4"] },
+    { name: "Hot Metal", colors: ["#0a0a0a", "#4a4a4a", "#e63946", "#f1faee"] },
+    { name: "Pastel Grid", colors: ["#fef6ff", "#ffd6e8", "#c8e7ff", "#d4ffea"] },
+    { name: "Midnight Amber", colors: ["#0b0c10", "#1f2833", "#c5c621", "#e6b800"] },
+    { name: "Coral Reef", colors: ["#e0fbfc", "#98c1d9", "#3d5a80", "#ee6c4d"] },
+    { name: "Ink & Paper", colors: ["#0a0a0a", "#f7f5f0"] },
+    { name: "Blueprint", colors: ["#0d1b2a", "#e0e6f0"] },
+    { name: "Signal Red", colors: ["#111111", "#e01e37"] },
+    { name: "Citrus Punch", colors: ["#1a1a1a", "#ffb703"] },
+    { name: "Mono Blue", colors: ["#ffffff", "#006cf0"] },
+    { name: "Chalkboard", colors: ["#1c2b2b", "#f2f2ea"] },
+    { name: "Rose Ash", colors: ["#2b1a1f", "#e8b4bc"] },
+    { name: "Verdigris", colors: ["#0f2e2b", "#8fd9c4"] },
+    { name: "Sand & Ink", colors: ["#f0e6d2", "#232020"] },
+    { name: "Neon Duotone", colors: ["#0a0a0a", "#39ff14"] },
+    { name: "Ice & Fire", colors: ["#ff4d00", "#00c2ff"] },
+    { name: "Cobalt Fade", colors: ["#001233", "#0466c8", "#979dac"] },
+    { name: "Sunset Triad", colors: ["#ff6b6b", "#ffd166", "#06d6a0"] },
+    { name: "Smoked Rose", colors: ["#2b2024", "#a4508b", "#e8c4c4"] },
+    { name: "Olive Grove", colors: ["#2f3e1f", "#7d9153", "#dfe6c4"] },
+    { name: "Plum Wine", colors: ["#1f0f1a", "#6b2d5c", "#d9a5c9"] },
+    { name: "Steel & Rust", colors: ["#2b2d33", "#5c5f66", "#d1603d"] },
+    { name: "Citrus Grove", colors: ["#1b3a2b", "#f4a300", "#f7f4e3"] },
+    { name: "Ash Rose Gold", colors: ["#2c2c2c", "#c9a66b", "#e8dfd8"] },
+    { name: "Tidepool", colors: ["#032f3c", "#0a6e77", "#a8e0dd"] },
+    { name: "Berry Static", colors: ["#12001f", "#8c1eff", "#f2d9ff"] },
+    { name: "Sepia Fade", colors: ["#2b1d13", "#8a6642", "#e8d9c4"] },
+    { name: "Vintage Poster", colors: ["#2c2013", "#c14953", "#e8b34a"] },
+    { name: "Slate & Copper", colors: ["#22282f", "#8a5a44", "#d8ccc0"] },
+    { name: "Monochrome Blue", colors: ["#001845", "#023e8a", "#90e0ef"] }
+  ],
+  artist: ["Drake", "Kendrick Lamar", "Travis Scott", "Kanye West", "Playboi Carti", "Future", "Lil Uzi Vert", "Young Thug", "21 Savage", "Metro Boomin", "Don Toliver", "Gunna", "Lil Baby", "A$AP Rocky", "Tyler, The Creator", "J. Cole", "Eminem", "50 Cent", "Snoop Dogg", "Tupac", "The Notorious B.I.G.", "Nas", "Jay-Z", "Ice Cube", "DMX", "Juice WRLD", "XXXTentacion", "Pop Smoke", "Central Cee", "Dave", "Stormzy", "Skepta", "AJ Tracey", "Headie One", "Nemzzz", "EsDeeKid", "Reble", "Lancey Foux", "Len", "Fimiguerrero", "YT", "Chy Cartier", "Lazer Dim 700", "Nettspend", "Osamason", "Che", "Ian", "Glokk40Spaz", "Destroy Lonely", "Ken Carson", "Yeat", "Lucki", "Baby Keem", "Denzel Curry", "Joey Bada$$", "Freddie Gibbs", "Schoolboy Q", "Pusha T", "A Boogie wit da Hoodie", "Rod Wave", "Polo G", "NLE Choppa", "Lil Durk", "Kodak Black", "Chief Keef", "YNW Melly", "Trippie Redd", "Ski Mask the Slump God", "Rich Amiri", "Autumn!", "Summrs", "SoFaygo", "Bktherula", "Hardrock", "Xaviersobased", "DC The Don", "Lil Tecca", "Teezo Touchdown", "Cash Cobain", "Sleepy Hallow", "Sheff G", "Digga D", "Clavish", "M Huncho", "K-Trap", "Knucks", "Meekz", "Bladee", "Yung Lean", "Ecco2K", "Thaiboy Digital", "PinkPantheress", "Charli XCX", "Billie Eilish", "The Weeknd", "Frank Ocean", "Brent Faiyaz", "SZA", "PARTYNEXTDOOR", "Bryson Tiller", "Chris Brown", "Miguel", "Giveon", "Daniel Caesar", "Tory Lanez", "Rihanna", "Beyoncé", "Ariana Grande", "Dua Lipa", "Olivia Rodrigo", "Sabrina Carpenter", "Tate McRae", "Doja Cat", "Nicki Minaj", "Cardi B", "Megan Thee Stallion", "Ice Spice", "Latto", "Sexyy Red", "Post Malone", "Justin Bieber", "Ed Sheeran", "Harry Styles", "Bruno Mars", "Imagine Dragons", "Linkin Park", "Green Day", "Nirvana", "Foo Fighters", "Arctic Monkeys", "The Neighbourhood", "Cigarettes After Sex", "Radiohead", "Coldplay", "Oasis", "Blur", "Queen", "AC/DC", "Metallica", "Iron Maiden", "Slipknot", "Korn", "System Of A Down", "Bring Me The Horizon", "Deftones", "Avenged Sevenfold", "Black Sabbath", "Led Zeppelin", "Pink Floyd", "The Beatles", "The Rolling Stones", "Michael Jackson", "Prince", "David Bowie", "Elton John", "Elvis Presley", "Bob Marley", "Daft Punk", "Calvin Harris", "David Guetta", "Martin Garrix", "Skrillex", "Fred again..", "Fisher", "Dom Dolla", "Swedish House Mafia", "Deadmau5", "Tiësto", "Armin van Buuren", "Aphex Twin", "Bon Iver", "Tame Impala", "Mac DeMarco", "Steve Lacy", "Clairo", "Rex Orange County", "Mac Miller", "Childish Gambino", "Anderson .Paak", "Steve Aoki", "Burna Boy", "Wizkid", "Tems", "Tyla", "Rema", "Asake", "Omah Lay", "Bad Bunny", "Feid", "Karol G", "J Balvin", "Anuel AA", "Peso Pluma", "Junior H", "Fuerza Regida", "Natanael Cano"],
+  projectType: ["Logo", "Brand Identity", "Brand Guidelines", "Business Card", "Letterhead", "Brand Presentation", "Poster", "Flyer", "Brochure", "Magazine Cover", "Magazine Layout", "Book Cover", "Book Layout", "Newspaper Ad", "Billboard", "Sticker", "Packaging", "Product Label", "Album Cover", "EP Cover", "Single Cover", "Vinyl Cover", "Cassette Cover", "Playlist Cover", "Concert Poster", "Tour Poster", "Merchandise Design", "Website", "Landing Page", "Portfolio Website", "Mobile App UI", "Dashboard UI", "UI Kit", "Social Media Post", "Instagram Carousel", "Instagram Story", "YouTube Thumbnail", "Twitch Overlay", "Discord Banner", "Email Newsletter", "Advertisement", "Product Campaign", "Social Campaign", "Banner Ad", "Bus Stop Poster", "Digital Billboard", "Marketing Campaign", "T-Shirt Design", "Hoodie Design", "Sneaker Design", "Clothing Collection", "Fashion Lookbook", "Game Cover", "Game UI", "Character Card", "Loading Screen", "Steam Capsule", "Game Icon", "Movie Poster", "Film Title Card", "Streaming Thumbnail", "DVD Cover", "Opening Title", "Wallpaper", "Calendar", "Infographic", "Presentation Slide", "Invitation", "Certificate", "Menu Design", "Trading Card", "Playing Card", "Tarot Card", "App Icon", "Dashboard Concept", "Landing Page Hero", "Event Poster", "Exhibition Poster", "Zine Cover"],
+  challenge: ["You can only use 5 undo (Ctrl+Z)", "You can only use 3 layers", "You can only use 1 font", "You can only use 2 colors", "You can only use shapes (no images allowed)", "You can only use text + shapes (no photos)", "You can only use one brush", "You can only use 10 elements total", "You can only use one composition layout (centered only)", "You cannot use gradients", "You cannot use blur effects", "You cannot use shadows", "You must finish in 15 minutes", "You must finish in 30 minutes", "You must design in one artboard only"],
+  themePlus: ["The Last Human Alive", "City Above the Clouds", "Lost Civilization", "Luxury Brand from 2200", "Museum of Forgotten Memories", "The End of Time", "Dreams Becoming Reality", "Artificial Paradise", "World Without Gravity", "The Final Broadcast", "Secret Underground Society", "Floating Kingdom", "Digital Afterlife", "The Last Tree on Earth", "Planet Covered by Water", "Kingdom of Eternal Winter", "Endless Desert Empire", "Forgotten Space Colony", "Underground Metropolis", "The City That Never Sleeps", "Civilization Inside a Giant Tree", "Castle Above the Ocean", "Hotel on the Moon", "Alien Luxury Resort", "Cyberpunk Tokyo in 2099", "Nature Reclaiming Humanity", "AI Becomes Human", "Humanity Becomes Digital", "World Without the Sun", "Moonlit Megacity", "The First Colony on Mars", "Space Prison", "Floating Marketplace", "Ancient Technology Rediscovered", "Portal Between Worlds", "Hidden Kingdom Beneath the Sea", "The Birth of a New Universe", "Last Train Through the Apocalypse", "City Frozen in Time", "Eternal Night", "Eternal Sunrise", "Forest Made of Crystal", "Neon Jungle", "Temple of Forgotten Gods", "Digital Heaven", "Mechanical Forest", "Ocean Above the Sky", "Abandoned Theme Park", "Black Gold Empire", "The Last Library", "Music Festival on Mars", "Interstellar Airport", "Kingdom Built on Volcanoes", "Floating Cathedral", "The Perfect Society", "The Collapse of Civilization", "Infinite Highway", "Parallel Earth", "Underwater Kingdom", "Ghost Town of the Future", "Machine Worshippers", "City Inside a Volcano", "Sky Pirates", "Luxury Space Hotel", "AI Fashion Week", "Ancient Alien Temple", "Hidden Garden of Eternity", "Neon Desert", "Solar Kingdom", "Lunar Capital", "Bio-Mechanical Civilization", "Planet of Giant Creatures", "Kingdom Without a King", "Living Architecture", "Digital Ocean", "Floating Forest", "The World's Largest Archive", "Endless Bridge", "Silent Megacity", "Forgotten Island", "Crystal Mountains", "Underground Ocean", "Desert of Glass", "Infinite Staircase", "City Powered by Music", "Museum of the Future", "Floating Arena", "Giant Clockwork World", "Sanctuary for Robots", "Paradise Lost", "World Inside a Computer", "Floating Observatory", "Ice Planet Colony", "Ancient Space Empire", "Kingdom Hidden in the Clouds", "The Last Ocean", "Digital Jungle", "Endless Storm", "City Built Around a Black Hole", "Civilization Beyond the Stars"],
+};
+/* ============================================================
+   STATE
+   ============================================================ */
+const allCategories = [
+  { key: "theme",        label: "Theme" },
+  { key: "style",         label: "Style" },
+  { key: "colorPalette",  label: "Color Palette" },
+  { key: "mood",          label: "Mood" },
+  { key: "artist",      label: "Music Artist" },
+  { key: "projectType", label: "Project Type" },
+  { key: "challenge",   label: "Challenge" },
+  { key: "themePlus",   label: "Theme Plus" }
+];
+
+const defaultActive = ["theme", "style", "colorPalette", "mood"];
+
+const state = {}; // key -> { locked: bool, value: any, active: bool }
+allCategories.forEach(c => {
+  state[c.key] = { locked: false, value: null, active: defaultActive.includes(c.key) };
+});
+
+let ticketNo = Math.floor(Math.random() * 900000) + 100000;
+
+const lockIconOpen = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="1.5"/><path d="M7 11V7a5 5 0 0 1 9-3"/></svg>`;
+const lockIconClosed = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="1.5"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+const closeIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>`;
+
+function randomFrom(arr){
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function renderValue(key){
+  const val = state[key].value;
+  if (key === "colorPalette"){
+    if (!val) return `<div class="swatches">${'<div class="swatch" style="background:#e4e4e4"></div>'.repeat(4)}</div>`;
+    return `
+      <div class="swatches">
+        ${val.colors.map(c => `<div class="swatch" style="background:${c}"></div>`).join("")}
+      </div>
+      <div class="palette-name">${val.name}</div>
+    `;
+  }
+  return `<div class="row-value fade">${val ?? "—"}</div>`;
+}
+
+function buildRow(cat){
+  const s = state[cat.key];
+  return `
+    <div class="row ${s.locked ? 'locked' : ''}" data-key="${cat.key}">
+      <div class="row-top">
+        <span class="row-label">${cat.label}</span>
+        <div class="row-actions">
+          <button class="icon-btn remove-cat-btn" title="Remove ${cat.label}">${closeIcon}</button>
+          <button class="icon-btn lock-btn" title="Lock ${cat.label}">${s.locked ? lockIconClosed : lockIconOpen}</button>
+        </div>
+      </div>
+      ${renderValue(cat.key)}
+    </div>
+  `;
+}
+
+function renderTicket(){
+  const active = allCategories.filter(c => state[c.key].active);
+  document.getElementById("ticket-rows").innerHTML = active.map(c => buildRow(c)).join("");
+  document.getElementById("ticket-no").textContent = `IDEA NO. ${String(ticketNo).padStart(6, "0")}`;
+}
+
+function renderChips(){
+  const inactive = allCategories.filter(c => !state[c.key].active);
+  document.getElementById("chips").innerHTML = inactive.map(c => `
+    <button class="chip" data-key="${c.key}">+ ${c.label}</button>
+  `).join("");
+}
+
+function attachEvents(){
+  document.querySelectorAll(".lock-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const key = e.currentTarget.closest(".row").dataset.key;
+      state[key].locked = !state[key].locked;
+      renderTicket();
+      attachEvents();
+    });
+  });
+
+  document.querySelectorAll(".remove-cat-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const key = e.currentTarget.closest(".row").dataset.key;
+      state[key].active = false;
+      state[key].locked = false;
+      renderTicket();
+      renderChips();
+      attachEvents();
+    });
+  });
+
+  document.querySelectorAll(".chip").forEach(chip => {
+    chip.addEventListener("click", (e) => {
+      const key = e.currentTarget.dataset.key;
+      state[key].active = true;
+      if (!state[key].value){
+        state[key].value = randomFrom(DATA[key]);
+      }
+      renderTicket();
+      renderChips();
+      attachEvents();
+    });
+  });
+}
+
+function generate(){
+  ticketNo = Math.floor(Math.random() * 900000) + 100000;
+  allCategories.forEach(cat => {
+    const s = state[cat.key];
+    if (s.active && !s.locked){
+      s.value = randomFrom(DATA[cat.key]);
+    }
+  });
+  renderTicket();
+  attachEvents();
+}
+
+document.getElementById("generate-btn").addEventListener("click", generate);
+
+/* initial render */
+renderTicket();
+renderChips();
+attachEvents();
+generate();
+</script>
+
+</body>
+</html>
